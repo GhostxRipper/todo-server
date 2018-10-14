@@ -1,5 +1,28 @@
 scalar Token
 
+input AddTodoInput {
+  text: String!
+  clientMutationId: String
+}
+
+type AddTodoPayload {
+  todoEdge: TodoEdge
+  viewer: User
+  clientMutationId: String
+}
+
+input ChangeTodoStatusInput {
+  complete: Boolean!
+  id: ID!
+  clientMutationId: String
+}
+
+type ChangeTodoStatusPayload {
+  todo: Todo
+  viewer: User
+  clientMutationId: String
+}
+
 input ConnectionInput {
   username: String!
   password: String!
@@ -10,9 +33,28 @@ type ConnectionPayload {
   token: Token!
 }
 
+input MarkAllTodosInput {
+  complete: Boolean!
+  clientMutationId: String
+}
+
+type MarkAllTodosPayload {
+  changedTodos: [Todo]
+  viewer: User
+  clientMutationId: String
+}
+
 type Mutation {
   login(input: ConnectionInput!): ConnectionPayload
   register(input: ConnectionInput!): ConnectionPayload
+  addTodo(input: AddTodoInput!): AddTodoPayload
+  changeTodoStatus(input: ChangeTodoStatusInput!): ChangeTodoStatusPayload
+  markAllTodos(input: MarkAllTodosInput!): MarkAllTodosPayload
+  removeCompletedTodos(
+    input: RemoveCompletedTodosInput!
+  ): RemoveCompletedTodosPayload
+  removeTodo(input: RemoveTodoInput!): RemoveTodoPayload
+  renameTodo(input: RenameTodoInput!): RenameTodoPayload
 }
 
 # An object with an ID
@@ -43,6 +85,38 @@ type Query {
   ): Node
 
   todos(after: String, first: Int, before: String, last: Int): TodoConnection
+}
+
+input RemoveCompletedTodosInput {
+  clientMutationId: String
+}
+
+type RemoveCompletedTodosPayload {
+  deletedTodoIds: [String]
+  viewer: User
+  clientMutationId: String
+}
+
+input RemoveTodoInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type RemoveTodoPayload {
+  deletedTodoId: ID
+  viewer: User
+  clientMutationId: String
+}
+
+input RenameTodoInput {
+  id: ID!
+  text: String!
+  clientMutationId: String
+}
+
+type RenameTodoPayload {
+  todo: Todo
+  clientMutationId: String
 }
 
 type Todo implements Node {

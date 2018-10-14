@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt')
 
-const getConfig = require('../../../helpers/getConfig')
-const { generate } = require('../../../helpers/token')
-const { toBase64 } = require('../../../helpers/base64')
+const getConfig = require('../../../../helpers/getConfig')
+const { generate } = require('../../../../helpers/token')
+const { toBase64 } = require('../../../../helpers/base64')
 
 module.exports = async (obj, { input }, { db }) => {
   const {

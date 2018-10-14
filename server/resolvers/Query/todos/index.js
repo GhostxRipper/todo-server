@@ -9,8 +9,6 @@ module.exports = async (obj, args, { db, token }) => {
   }
   const { id } = await getUserFromToken(token)
 
-  console.log(id)
-
   let length = await db.llen(`todolist:${id}`)
   length = parseInt(length, 10)
 
@@ -21,14 +19,17 @@ module.exports = async (obj, args, { db, token }) => {
     length,
   )
 
-  const ids = (await db.lrange(`todolist:${id}`, offset, limit)) || []
+  const ids = (await db.lrange(`todolist:${id}`, offset, limit - 1)) || []
   let edges = await Promise.all(
-    ids.map(todoId => getTodo(toBase64(`Todo:${todoId}`))),
+    ids.map(todoId => getTodo(db, toBase64(`Todo:${todoId}`))),
   )
   edges = edges.filter(Boolean)
   edges = edges.map((node, index) => ({
     cursor: offsetToCursor(index + offset),
-    node,
+    node: {
+      ...node,
+      complete: node.complete === 'true',
+    },
   }))
 
   const firstEdge = edges[0]

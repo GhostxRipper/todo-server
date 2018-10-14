@@ -3,6 +3,7 @@ const Token = require('./Scalar/Token')
 
 const login = require('./Mutation/login')
 const register = require('./Mutation/register')
+const addTodo = require('./Mutation/addTodo')
 
 const viewer = require('./Query/viewer')
 const node = require('./Query/node')
@@ -14,6 +15,7 @@ module.exports = {
   Mutation: {
     login,
     register,
+    addTodo,
   },
   Query: {
     viewer,

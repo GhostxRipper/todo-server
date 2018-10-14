@@ -1,0 +1,7 @@
+{
+  "ignore": ["*.test.js", ".git"],
+  "env": {
+    "NODE_ENV": "local"
+  },
+  "ext": "js,graphql"
+}

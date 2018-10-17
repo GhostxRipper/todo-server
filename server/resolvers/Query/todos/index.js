@@ -1,4 +1,4 @@
-const { getUserFromToken } = require('../../../../helpers/token')
+const { getUserIdFromToken } = require('../../../../helpers/token')
 const { toBase64 } = require('../../../../helpers/base64')
 const getTodo = require('../node/getTodo')
 const { getConnectionInfo, offsetToCursor } = require('./getConnectionFromList')
@@ -7,7 +7,7 @@ module.exports = async (obj, args, { db, token }) => {
   if (!token) {
     throw new Error('403: token must be filled')
   }
-  const { id } = await getUserFromToken(token)
+  const id = getUserIdFromToken(token)
 
   let length = await db.llen(`todolist:${id}`)
   length = parseInt(length, 10)

@@ -4,6 +4,7 @@ const Token = require('./Scalar/Token')
 const login = require('./Mutation/login')
 const register = require('./Mutation/register')
 const addTodo = require('./Mutation/addTodo')
+const changeTodoStatus = require('./Mutation/changeTodoStatus')
 
 const viewer = require('./Query/viewer')
 const node = require('./Query/node')
@@ -16,6 +17,7 @@ module.exports = {
     login,
     register,
     addTodo,
+    changeTodoStatus,
   },
   Query: {
     viewer,

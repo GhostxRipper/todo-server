@@ -13,7 +13,7 @@ const decode = token => {
   return verify(token, secret, { maxAge: expiresIn })
 }
 
-const getUserFromToken = async token => {
+const getUserIdFromToken = token => {
   let userId
 
   try {
@@ -22,23 +22,29 @@ const getUserFromToken = async token => {
   } catch (error) {
     console.error(error)
   }
-
   if (!userId) {
     throw new Error('401: invalid token')
   }
 
+  return userId
+}
+
+const getUserFromToken = async token => {
+  const id = getUserIdFromToken(token)
+
   const db = await getConnection()
-  const user = await db.hgetall(`user:${userId}`)
+  const user = await db.hgetall(`user:${id}`)
 
   if (!Object.keys(user).length) {
     throw new Error('401: invalid token')
   }
 
-  return { ...user, id: userId }
+  return { ...user, id }
 }
 
 module.exports = {
   generate,
   decode,
   getUserFromToken,
+  getUserIdFromToken,
 }

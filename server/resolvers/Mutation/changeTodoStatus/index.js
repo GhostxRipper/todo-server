@@ -1,24 +1,27 @@
-const { getUserFromToken } = require('../../../../helpers/token')
+const { fromBase64, toBase64 } = require('../../../../helpers/base64')
 
-module.exports = async (obj, { input }, { db, token }) => {
-  const { id, complete, clientMutationId } = input
-  if (!token) {
+module.exports = async (obj, { input }, { db, viewer }) => {
+  const { id: base64Id, complete, clientMutationId } = input
+  if (!viewer) {
     throw new Error('403: token must be filled')
   }
+  const [, id] = fromBase64(base64Id).split(':')
 
   const todo = await db.hgetall(`todo:${id}`)
   if (!Object.keys(todo).length) {
-    throw new Error(`404: Entity \`Todo\` with id ${id} not found`)
+    throw new Error(`404: Entity \`Todo\` with id ${base64Id} not found`)
   }
 
-  const user = await getUserFromToken(token)
-
-  const todosIds = (await db.lrange(`todolist:${user.id}`, 0, -1)) || []
+  const todosIds = (await db.lrange(`todolist:${viewer.id}`, 0, -1)) || []
   if (!todosIds.find(v => v === id)) {
     throw new Error('403: You cannot access to this `Todo`')
   }
 
   await db.hset(`todo:${id}`, 'complete', complete)
 
-  return { todo: { ...todo, id, complete }, viewer: user, clientMutationId }
+  return {
+    todo: { ...todo, id, complete },
+    viewer: { ...viewer, id: toBase64(`User:${viewer.id}`) },
+    clientMutationId,
+  }
 }

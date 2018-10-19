@@ -1,16 +1,15 @@
-const { getUserFromToken } = require('../../../../helpers/token')
 const { toBase64 } = require('../../../../helpers/base64')
 const { offsetToCursor } = require('../../Query/todos/getConnectionFromList')
 
 module.exports = async (
   obj,
   { input: { text, clientMutationId } },
-  { db, token },
+  { db, viewer },
 ) => {
-  if (!token) {
+  if (!viewer) {
     throw new Error('403: token must be filled')
   }
-  const { id: userId, ...user } = await getUserFromToken(token)
+  const { id: userId, ...user } = viewer
 
   const id = await db.incr('next_todo_id')
   await db.hmset(`todo:${id}`, 'text', text, 'complete', false)

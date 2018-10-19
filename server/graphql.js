@@ -5,6 +5,7 @@ const { makeExecutableSchema } = require('graphql-tools')
 const { kill, getConnection } = require('../helpers/db')
 const colors = require('../helpers/colors')
 const { getAuthorization } = require('../helpers/headers')
+const { getUserFromToken } = require('../helpers/token')
 
 const { parse } = JSON
 
@@ -16,10 +17,15 @@ const schema = makeExecutableSchema({ typeDefs, resolvers })
 module.exports = async ({ query, variables }, headers = {}) => {
   const db = await getConnection()
   const token = getAuthorization(headers).replace(/Bearer /, '')
+  let viewer
+  if (token) {
+    viewer = await getUserFromToken(token)
+  }
+
   const context = {
     headers,
     db,
-    token,
+    viewer,
   }
 
   // eslint-disable-next-line no-nested-ternary, no-param-reassign

@@ -5,6 +5,7 @@ const login = require('./Mutation/login')
 const register = require('./Mutation/register')
 const addTodo = require('./Mutation/addTodo')
 const changeTodoStatus = require('./Mutation/changeTodoStatus')
+const markAllTodos = require('./Mutation/markAllTodos')
 
 const viewer = require('./Query/viewer')
 const node = require('./Query/node')
@@ -18,6 +19,7 @@ module.exports = {
     register,
     addTodo,
     changeTodoStatus,
+    markAllTodos,
   },
   Query: {
     viewer,

@@ -1,6 +1,8 @@
 const { fromBase64 } = require('../../../../helpers/base64')
+const { getConnection } = require('../../../../helpers/db')
 
-module.exports = async (db, globalId) => {
+module.exports = async globalId => {
+  const db = await getConnection()
   let [, id] = fromBase64(globalId).split(':')
   id = parseInt(id, 10)
 

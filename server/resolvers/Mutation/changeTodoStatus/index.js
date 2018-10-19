@@ -1,4 +1,5 @@
 const { fromBase64, toBase64 } = require('../../../../helpers/base64')
+const getTodo = require('../../Query/node/getTodo')
 
 module.exports = async (obj, { input }, { db, viewer }) => {
   const { id: base64Id, complete, clientMutationId } = input
@@ -7,8 +8,8 @@ module.exports = async (obj, { input }, { db, viewer }) => {
   }
   const [, id] = fromBase64(base64Id).split(':')
 
-  const todo = await db.hgetall(`todo:${id}`)
-  if (!Object.keys(todo).length) {
+  const todo = await getTodo(base64Id)
+  if (!todo) {
     throw new Error(`404: Entity \`Todo\` with id ${base64Id} not found`)
   }
 

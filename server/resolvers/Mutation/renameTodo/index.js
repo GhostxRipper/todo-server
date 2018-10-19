@@ -1,7 +1,7 @@
-const { fromBase64, toBase64 } = require('../../../../helpers/base64')
+const { fromBase64 } = require('../../../../helpers/base64')
 
 module.exports = async (obj, { input }, { db, viewer }) => {
-  const { id: base64Id, complete, clientMutationId } = input
+  const { id: base64Id, text, clientMutationId } = input
   if (!viewer) {
     throw new Error('403: token must be filled')
   }
@@ -17,11 +17,10 @@ module.exports = async (obj, { input }, { db, viewer }) => {
     throw new Error(`404: Entity \`Todo\` with id ${base64Id} not found`)
   }
 
-  await db.hset(`todo:${id}`, 'complete', complete)
+  await db.hset(`todo:${id}`, 'text', text)
 
   return {
-    todo: { ...todo, id: base64Id, complete },
-    viewer: { ...viewer, id: toBase64(`User:${viewer.id}`) },
+    todo: { ...todo, id: base64Id, text },
     clientMutationId,
   }
 }

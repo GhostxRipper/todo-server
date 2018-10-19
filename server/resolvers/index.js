@@ -8,10 +8,13 @@ const changeTodoStatus = require('./Mutation/changeTodoStatus')
 const markAllTodos = require('./Mutation/markAllTodos')
 const removeCompletedTodos = require('./Mutation/removeCompletedTodos')
 const removeTodo = require('./Mutation/removeTodo')
+const renameTodo = require('./Mutation/renameTodo')
 
 const viewer = require('./Query/viewer')
 const node = require('./Query/node')
 const todos = require('./Query/todos')
+
+const Todo = require('./Type/Todo')
 
 module.exports = {
   Node,
@@ -24,10 +27,12 @@ module.exports = {
     markAllTodos,
     removeCompletedTodos,
     removeTodo,
+    renameTodo,
   },
   Query: {
     viewer,
     node,
     todos,
   },
+  Todo,
 }

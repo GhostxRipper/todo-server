@@ -25,10 +25,7 @@ module.exports = async (obj, args, { db, viewer }) => {
   edges = edges.filter(Boolean)
   edges = edges.map((node, index) => ({
     cursor: offsetToCursor(index + offset),
-    node: {
-      ...node,
-      complete: node.complete === 'true',
-    },
+    node,
   }))
 
   const firstEdge = edges[0]

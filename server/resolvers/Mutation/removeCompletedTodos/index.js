@@ -21,9 +21,9 @@ module.exports = async (obj, { input }, { db, viewer }) => {
   await db.del(deletedTodoIds.map(id => `Todo:${id}`))
 
   const todolist = todos.filter(todo => !todo.complete).map(({ id }) => id)
-  todolist.reverse()
+
   await db.del(`todolist:${viewer.id}`)
-  await Promise.all(todolist.map(id => db.lpush(`todolist:${viewer.id}`, id)))
+  await Promise.all(todolist.map(id => db.rpush(`todolist:${viewer.id}`, id)))
 
   return {
     deletedTodoIds: deletedTodoIds.map(id => toBase64(`Todo:${id}`)),
